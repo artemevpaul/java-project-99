@@ -1,7 +1,4 @@
 name: Java CI
-defaults:
-  run:
-    working-directory: ./app
 
 on:
   - push
