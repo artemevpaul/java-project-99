@@ -3,7 +3,9 @@ package hexlet.code.component;
 import hexlet.code.dto.UserCreateDTO;
 import hexlet.code.controllers.api.UsersController;
 import hexlet.code.mapper.UserMapper;
+import hexlet.code.model.User;
 import hexlet.code.repository.UserRepository;
+import hexlet.code.service.CustomUserDetailsService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -14,24 +16,25 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 public class DataInitializer implements ApplicationRunner {
 
+//    @Autowired
+//    private final UserRepository userRepository;
+//
+//    @Autowired
+//    private final UserMapper userMapper;
+//
+//    @Autowired
+//    private UsersController usersController;
 
     @Autowired
-    private final UserRepository userRepository;
-
-    @Autowired
-    private final UserMapper userMapper;
-
-    @Autowired
-    private UsersController usersController;
+    private CustomUserDetailsService userService;
 
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        var admin = new UserCreateDTO();
-        admin.setEmail("hexlet@example.com");
-        admin.setFirstName("Admin");
-        admin.setLastName("Admin");
-        admin.setPassword("qwerty");
-        usersController.create(admin);
+        var email = "hexlet@example.com";
+        var userData = new User();
+        userData.setEmail(email);
+        userData.setPasswordDigest("qwerty");
+        userService.createUser(userData);
     }
 }
