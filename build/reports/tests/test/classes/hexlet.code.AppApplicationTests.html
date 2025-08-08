@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.944s</div>
+<div class="counter">0.573s</div>
 <p>duration</p>
 </div>
 </td>
@@ -82,7 +82,7 @@
 </thead>
 <tr>
 <td class="success">contextLoads()</td>
-<td class="success">0.944s</td>
+<td class="success">0.573s</td>
 <td class="success">passed</td>
 </tr>
 </table>
@@ -90,8 +90,9 @@
 <div class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>16:19:57.535 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [hexlet.code.AppApplicationTests]: AppApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-16:19:57.659 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration hexlet.code.AppApplication for test class hexlet.code.AppApplicationTests
+<pre>11:58:56.186 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [hexlet.code.AppApplicationTests]: AppApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+11:58:56.347 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration hexlet.code.AppApplication for test class hexlet.code.AppApplicationTests
+11:58:56.541 [Test worker] INFO org.springframework.boot.devtools.restart.RestartApplicationListener -- Restart disabled due to context in which it is running
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -102,9 +103,33 @@
 
  :: Spring Boot ::                (v3.5.4)
 
-2025-08-06T16:19:58.186+02:00  INFO 97693 --- [app] [    Test worker] hexlet.code.AppApplicationTests          : Starting AppApplicationTests using Java 21.0.3 with PID 97693 (started by damention in /Users/damention/Hexlet/java-project-99/java-project-99)
-2025-08-06T16:19:58.188+02:00  INFO 97693 --- [app] [    Test worker] hexlet.code.AppApplicationTests          : No active profile set, falling back to 1 default profile: &quot;default&quot;
-2025-08-06T16:19:59.832+02:00  INFO 97693 --- [app] [    Test worker] hexlet.code.AppApplicationTests          : Started AppApplicationTests in 2.025 seconds (process running for 3.371)
+2025-08-08T11:58:57.019+02:00  INFO 9507 --- [app] [    Test worker] hexlet.code.AppApplicationTests          : Starting AppApplicationTests using Java 21.0.3 with PID 9507 (started by damention in /Users/damention/Hexlet/java-project-99/java-project-99)
+2025-08-08T11:58:57.020+02:00  INFO 9507 --- [app] [    Test worker] hexlet.code.AppApplicationTests          : No active profile set, falling back to 1 default profile: &quot;default&quot;
+2025-08-08T11:58:58.833+02:00  INFO 9507 --- [app] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-08-08T11:58:58.925+02:00  INFO 9507 --- [app] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 73 ms. Found 1 JPA repository interface.
+2025-08-08T11:58:59.808+02:00  INFO 9507 --- [app] [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-08-08T11:58:59.847+02:00  INFO 9507 --- [app] [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.22.Final
+2025-08-08T11:58:59.870+02:00  INFO 9507 --- [app] [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-08-08T11:59:00.100+02:00  INFO 9507 --- [app] [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-08-08T11:59:00.133+02:00  INFO 9507 --- [app] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-08-08T11:59:00.263+02:00  INFO 9507 --- [app] [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:60cf92e7-2aca-48cc-97ed-bc1facf9ae2f user=SA
+2025-08-08T11:59:00.268+02:00  INFO 9507 --- [app] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-08-08T11:59:00.323+02:00  INFO 9507 --- [app] [    Test worker] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-08-08T11:59:01.125+02:00  INFO 9507 --- [app] [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+Hibernate: create table users (id bigint generated by default as identity, created_at date, email varchar(255), first_name varchar(255), last_name varchar(255), password_digest varchar(255), updated_at date, primary key (id))
+Hibernate: alter table if exists users drop constraint if exists UK6dotkott2kjsp8vw4d0m25fb7
+Hibernate: alter table if exists users add constraint UK6dotkott2kjsp8vw4d0m25fb7 unique (email)
+2025-08-08T11:59:01.216+02:00  INFO 9507 --- [app] [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-08-08T11:59:01.617+02:00  WARN 9507 --- [app] [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-08-08T11:59:02.511+02:00  INFO 9507 --- [app] [    Test worker] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2025-08-08T11:59:02.963+02:00  INFO 9507 --- [app] [    Test worker] hexlet.code.AppApplicationTests          : Started AppApplicationTests in 6.434 seconds (process running for 8.022)
 </pre>
 </span>
 </div>
@@ -127,7 +152,7 @@ WARNING: Dynamic loading of agents will be disallowed by default in a future rel
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="https://www.gradle.org">Gradle 8.14.3</a> at Aug 6, 2025, 4:20:00 PM</p>
+<a href="https://www.gradle.org">Gradle 8.14.3</a> at Aug 8, 2025, 11:59:03 AM</p>
 </div>
 </div>
 </body>
