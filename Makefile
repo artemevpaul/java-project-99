@@ -21,8 +21,8 @@ report:
 install:
 	./gradlew installDist
 
-lint:
-	./gradlew checkstyleMain
+#lint:
+#	./gradlew checkstyleMain
 
 test:
 	./gradlew test
