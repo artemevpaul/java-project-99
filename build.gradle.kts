@@ -1,9 +1,12 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
+
 plugins {
 	java
 	application
 	//checkstyle
-	id("org.springframework.boot") version "3.5.4"
-	id("io.spring.dependency-management") version "1.1.7"
+	alias(libs.plugins.spring.boot)
+	alias(libs.plugins.spring.dependency.management)
 	alias(libs.plugins.lombok)
 
 }
@@ -46,14 +49,27 @@ dependencies {
 	annotationProcessor(libs.mapstructProcessor)
 
 	//Test
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+	testImplementation(libs.springBootStarterTest)
+	testImplementation(libs.springSecurityTest)
+	testImplementation(platform(libs.junitBom))
+	testImplementation(libs.junitJupiter)
+	testRuntimeOnly(libs.junitPlatformLauncher)
+
 
 	//DB
 	runtimeOnly(libs.h2)
 
 }
 
-tasks.withType<Test> {
+tasks.test {
 	useJUnitPlatform()
+	testLogging {
+		exceptionFormat = TestExceptionFormat.FULL
+		events = setOf(
+			TestLogEvent.FAILED,
+			TestLogEvent.PASSED,
+			TestLogEvent.SKIPPED
+		)
+		showStandardStreams = true
+	}
 }
