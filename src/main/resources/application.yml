@@ -5,6 +5,30 @@ spring:
       ddl-auto: update
   profiles:
     active: dev
+
+output:
+  ansi:
+    enabled: always
+
+instancio:
+  bean:
+    validation:
+      enabled: true
+
+sql:
+  init:
+    mode: always
+
+logging:
+  level:
+    root: INFO
+
 rsa:
   private-key: classpath:certs/private.pem
   public-key: classpath:certs/public.pem
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true

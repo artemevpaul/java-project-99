@@ -10,6 +10,7 @@ import hexlet.code.mapper.TaskMapper;
 import hexlet.code.mapper.UserMapper;
 import hexlet.code.model.Task;
 import hexlet.code.model.User;
+import hexlet.code.repository.LabelRepository;
 import hexlet.code.repository.TaskRepository;
 import hexlet.code.repository.TaskStatusRepository;
 import hexlet.code.repository.UserRepository;
@@ -61,6 +62,9 @@ class TaskControllerTest {
     @Autowired
     private TaskStatusRepository taskStatusRepository;
 
+//    @Autowired
+//    private LabelRepository labelRepository;
+
     @Autowired
     private TaskMapper taskMapper;
 
@@ -75,28 +79,31 @@ class TaskControllerTest {
 
     private JwtRequestPostProcessor token;
 
-    @BeforeEach
-    public void setUp() {
-        taskRepository.deleteAll();
-        userRepository.deleteAll();
-        taskStatusRepository.deleteAll();
 
-        mockMvc = MockMvcBuilders.webAppContextSetup(wac)
-                .defaultResponseCharacterEncoding(StandardCharsets.UTF_8)
-                .apply(springSecurity())
-                .build();
-        testUser = Instancio.of(modelGenerator.getUserModel()).create();
-        userRepository.save(testUser);
-        token = jwt().jwt(builder -> builder.subject(testUser.getEmail()));
+@BeforeEach
+public void setUp() {
+    taskRepository.deleteAll();
+    userRepository.deleteAll();
+    taskStatusRepository.deleteAll();
 
-        var status = Instancio.of(modelGenerator.getTaskStatusModel()).create();
-        taskStatusRepository.save(status);
+    mockMvc = MockMvcBuilders.webAppContextSetup(wac)
+            .defaultResponseCharacterEncoding(StandardCharsets.UTF_8)
+            .apply(springSecurity())
+            .build();
 
-        testTask = Instancio.of(modelGenerator.getTaskModel())
-                .create();
-        testTask.setAssignee(testUser);
-        testTask.setTaskStatus(status);
-    }
+    testUser = Instancio.of(modelGenerator.getUserModel()).create();
+    userRepository.save(testUser);
+    token = jwt().jwt(builder -> builder.subject(testUser.getEmail()));
+
+    var status = Instancio.of(modelGenerator.getTaskStatusModel()).create();
+    taskStatusRepository.save(status);
+
+    testTask = Instancio.of(modelGenerator.getTaskModel()).create();
+    testTask.setAssignee(testUser);
+    testTask.setTaskStatus(status);
+
+    testTask.getLabels().clear();
+}
 
     @Test
     public void testIndex() throws Exception {
@@ -173,4 +180,3 @@ class TaskControllerTest {
         assertThat(taskRepository.existsById(testTask.getId())).isEqualTo(true);
     }
 }
-

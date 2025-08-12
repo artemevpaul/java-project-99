@@ -71,6 +71,11 @@ public class TaskStatusControllerTest {
 
     @BeforeEach
     public void setUp() {
+
+            taskRepository.deleteAll();
+            userRepository.deleteAll();
+            taskStatusRepository.deleteAll();
+
         mockMvc = MockMvcBuilders.webAppContextSetup(wac)
                 .defaultResponseCharacterEncoding(StandardCharsets.UTF_8)
                 .apply(springSecurity())
@@ -85,12 +90,6 @@ public class TaskStatusControllerTest {
 
     }
 
-    @BeforeEach
-    public void clean() {
-        taskRepository.deleteAll();
-        userRepository.deleteAll();
-        taskStatusRepository.deleteAll();
-    }
 
 
     @Test

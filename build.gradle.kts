@@ -48,6 +48,9 @@ dependencies {
 	implementation(libs.mapstruct)
 	annotationProcessor(libs.mapstructProcessor)
 
+    // OpenAPI
+    implementation(libs.springdocOpenapiUi)
+
 	//Test
 	testImplementation(libs.springBootStarterTest)
 	testImplementation(libs.springSecurityTest)

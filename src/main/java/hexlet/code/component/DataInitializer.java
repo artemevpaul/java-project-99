@@ -1,8 +1,10 @@
 package hexlet.code.component;
 
+import hexlet.code.controllers.api.LabelController;
 import hexlet.code.controllers.api.TaskStatusController;
 import hexlet.code.dto.UserCreateDTO;
 import hexlet.code.controllers.api.UsersController;
+import hexlet.code.dto.label.LabelCreateDTO;
 import hexlet.code.dto.taskStatus.TaskStatusCreateDTO;
 import hexlet.code.mapper.UserMapper;
 import hexlet.code.model.User;
@@ -36,6 +38,9 @@ public class DataInitializer implements ApplicationRunner {
     @Autowired
     private TaskStatusController taskStatusController;
 
+    @Autowired
+    private LabelController labelController;
+
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -53,5 +58,11 @@ public class DataInitializer implements ApplicationRunner {
                 new TaskStatusCreateDTO("Published", "published")
         );
         taskStatuses.forEach(taskStatusController::create);
+
+        List<LabelCreateDTO> labels = Arrays.asList(
+                new LabelCreateDTO("feature"),
+                new LabelCreateDTO("bug")
+        );
+        labels.forEach(labelController::create);
     }
 }
