@@ -17,7 +17,7 @@ import java.util.Set;
 @Getter
 @Setter
 @EntityListeners(AuditingEntityListener.class)
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(of = {"name"})
 @Table(name = "labels")
 @ToString(includeFieldNames = true, onlyExplicitlyIncluded = true)
 public class Label implements BaseEntity {
@@ -25,16 +25,14 @@ public class Label implements BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @EqualsAndHashCode.Include
     @ToString.Include
-    @Size(min = 3, max = 3000)
+    @Size(min = 3, max = 1000)
     @Column(unique = true)
     private String name;
 
     @CreatedDate
-    @ToString.Include
     private LocalDate createdAt;
 
-    @ManyToMany(mappedBy = "labels")
+    @ManyToMany(mappedBy = "labels", cascade = CascadeType.MERGE)
     private Set<Task> tasks = new HashSet<>();
 }

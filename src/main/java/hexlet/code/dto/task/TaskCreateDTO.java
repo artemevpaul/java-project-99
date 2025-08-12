@@ -8,20 +8,22 @@ import lombok.Getter;
 import lombok.Setter;
 import org.openapitools.jackson.nullable.JsonNullable;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Getter
 @Setter
 public class TaskCreateDTO {
+    private JsonNullable<Integer> index;
 
     @NotBlank
-    private String name;
-
-    private Integer index;
-
-    private String description;
+    private String title;
+    private String content;
 
     @NotNull
-    private TaskStatus taskStatus;
+    private String status;
 
     @JsonProperty("assignee_id")
     private JsonNullable<Long> assigneeId;
+    private Set<Long> taskLabelIds = new HashSet<>();
 }

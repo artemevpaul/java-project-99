@@ -15,6 +15,7 @@ import hexlet.code.repository.TaskRepository;
 import hexlet.code.repository.TaskStatusRepository;
 import hexlet.code.repository.UserRepository;
 import hexlet.code.util.ModelGenerator;
+import jakarta.transaction.Transactional;
 import org.assertj.core.api.Assertions;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.BeforeEach;
@@ -116,17 +117,17 @@ public void setUp() {
 
         List<TaskDTO> taskDTOS = om.readValue(body, new TypeReference<>() {});
 
-        var actual = taskDTOS.stream().map(taskMapper::map).toList();
-        var expected = taskRepository.findAll();
+        var actual = taskDTOS;
+        var expected = taskRepository.findAll().stream().map(taskMapper::map).toList();
         Assertions.assertThat(actual).containsExactlyInAnyOrderElementsOf(expected);
     }
     @Test
     public void testCreate() throws Exception {
         var createDto = new TaskCreateDTO();
-        createDto.setName(testTask.getName());
-        createDto.setIndex(testTask.getIndex());
-        createDto.setDescription(testTask.getDescription());
-        createDto.setTaskStatus(testTask.getTaskStatus()); // @NotNull required
+        createDto.setTitle(testTask.getName());
+        createDto.setIndex(JsonNullable.of(testTask.getIndex()));
+        createDto.setContent(testTask.getDescription());
+        createDto.setStatus(testTask.getTaskStatus().getSlug());
         createDto.setAssigneeId(JsonNullable.of(testUser.getId()));
 
 
@@ -147,7 +148,7 @@ public void setUp() {
         taskRepository.save(testTask);
 
         var data = new TaskUpdateDTO();
-        data.setName(JsonNullable.of("new name"));
+        data.setTitle(JsonNullable.of("new name"));
 
         var request = put("/api/tasks/" + testTask.getId())
                 .with(token)
@@ -158,7 +159,7 @@ public void setUp() {
                 .andExpect(status().isOk());
 
         testTask = taskRepository.findById(testTask.getId()).orElseThrow();
-        assertThat(testTask.getName()).isEqualTo(data.getName().get());
+        assertThat(testTask.getName()).isEqualTo(data.getTitle().get());
     }
     @Test
     public void testDestroy() throws Exception {

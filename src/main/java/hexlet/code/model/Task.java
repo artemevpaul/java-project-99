@@ -1,5 +1,6 @@
 package hexlet.code.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -24,8 +25,6 @@ import java.util.Set;
 public class Task implements BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @ToString.Include
-    @EqualsAndHashCode.Include
     private Long id;
 
     private Integer index;
@@ -34,7 +33,6 @@ public class Task implements BaseEntity {
     @ToString.Include
     private String name;
 
-
     private String description;
 
     @NotNull
@@ -42,9 +40,10 @@ public class Task implements BaseEntity {
     private TaskStatus taskStatus;
 
     @ManyToOne(optional = false, cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @JsonProperty("assignee_id")
     private User assignee;
 
-    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "tasks_labels",
             joinColumns = @JoinColumn(name = "tasks_id"),
