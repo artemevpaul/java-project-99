@@ -180,4 +180,30 @@ public void setUp() {
 
         assertThat(taskRepository.existsById(testTask.getId())).isEqualTo(true);
     }
+
+    @Test
+    public void testFilteredIndex() throws Exception {
+        var otherUser = Instancio.of(modelGenerator.getUserModel()).create();
+        userRepository.save(otherUser);
+
+        var otherTask = Instancio.of(modelGenerator.getTaskModel()).create();
+        otherTask.setAssignee(otherUser);
+        otherTask.setTaskStatus(testTask.getTaskStatus());
+        otherTask.getLabels().clear();
+
+        taskRepository.saveAll(List.of(testTask, otherTask));
+
+        var result = mockMvc.perform(
+                        get("/api/tasks")
+                                .queryParam("assigneeId", String.valueOf(testUser.getId()))
+                                .with(token))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        var body = result.getResponse().getContentAsString();
+        assertThatJson(body)
+                .isArray()
+                .hasSize(1);
+    }
+
 }

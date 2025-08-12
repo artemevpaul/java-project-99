@@ -37,7 +37,7 @@ import hexlet.code.AppApplication;
 @ContextConfiguration(classes = AppApplication.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-public class LabelTest {
+public class LabelControllerTest {
 
     @Autowired
     private WebApplicationContext wac;
