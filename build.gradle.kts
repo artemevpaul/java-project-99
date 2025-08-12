@@ -21,9 +21,6 @@ java {
 	}
 }
 
-tasks.withType<JavaCompile>().configureEach {
-    options.compilerArgs.add("-parameters")
-}
 
 
 application { mainClass.set("hexlet.code.AppApplication") }

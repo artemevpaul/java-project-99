@@ -10,10 +10,8 @@ import hexlet.code.repository.TaskRepository;
 import hexlet.code.specification.TaskSpecification;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,7 +42,6 @@ public class TaskController {
     }
 
     @PostMapping("")
-    @PreAuthorize("isAuthenticated()")
     @ResponseStatus(HttpStatus.CREATED)
     public TaskDTO create(@Valid @RequestBody TaskCreateDTO taskData) {
         var task = taskMapper.map(taskData);
@@ -62,7 +59,6 @@ public class TaskController {
         return taskDto;
     }
     @PutMapping("/{id}")
-    @PreAuthorize("isAuthenticated()")
     @ResponseStatus(HttpStatus.OK)
     public TaskDTO update(@Valid @RequestBody TaskUpdateDTO taskData, @PathVariable Long id) {
         var task = taskRepository.findById(id)
@@ -73,7 +69,6 @@ public class TaskController {
         return taskDto;
     }
     @DeleteMapping("/{id}")
-    @PreAuthorize("@userUtils.isAssignee(#id)")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable long id) {
         var task = taskRepository.findById(id)
