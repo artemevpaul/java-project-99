@@ -5,7 +5,7 @@ node_modules
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
-
+src/main/resources/application-secrets.yml 
 ### IntelliJ IDEA ###
 .idea
 .idea/modules.xml

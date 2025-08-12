@@ -8,6 +8,7 @@ plugins {
 	alias(libs.plugins.spring.boot)
 	alias(libs.plugins.spring.dependency.management)
 	alias(libs.plugins.lombok)
+    id ("io.sentry.jvm.gradle") version "5.1.0"
 
 }
 
@@ -62,6 +63,21 @@ dependencies {
 	//DB
 	runtimeOnly(libs.h2)
 
+}
+
+sentry {
+    // Generates a JVM (Java, Kotlin, etc.) source bundle and uploads your source code to Sentry.
+    // This enables source context, allowing you to see your source
+    // code as part of your stack traces in Sentry.
+    includeSourceContext = true
+
+    org = "artemevpaul"
+    projectName = "java-spring"
+    authToken = System.getenv("SENTRY_AUTH_TOKEN")
+}
+
+tasks.sentryBundleSourcesJava {
+    enabled = System.getenv("SENTRY_AUTH_TOKEN") != null
 }
 
 tasks.test {
