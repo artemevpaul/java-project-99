@@ -63,6 +63,7 @@ dependencies {
 
     //DB
     runtimeOnly(libs.h2)
+    runtimeOnly("org.postgresql:postgresql")
 
 }
 
