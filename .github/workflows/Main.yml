@@ -19,6 +19,11 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
       - name: Make script executable
         run: chmod +x gradlew
+      - name: Write JWT keys
+        run: |
+          mkdir -p certs
+          printf "%s" "${{ secrets.JWT_PRIVATE_KEY }}" > certs/private.pem
+          printf "%s" "${{ secrets.JWT_PUBLIC_KEY }}"  > certs/public.pem
       - name: Build with Gradle
         uses: gradle/gradle-build-action@v3
         with:

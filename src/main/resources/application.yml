@@ -24,8 +24,8 @@ logging:
     root: INFO
 
 rsa:
-  private-key: classpath:certs/private.pem
-  public-key: classpath:certs/public.pem
+  private-key: ${JWT_PRIVATE_KEY_PATH:classpath:certs/private.pem}
+  public-key:  ${JWT_PUBLIC_KEY_PATH:classpath:certs/public.pem}
 
 springdoc:
   api-docs:
