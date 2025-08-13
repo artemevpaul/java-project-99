@@ -50,13 +50,13 @@ public class ModelGenerator {
                 .supply(Select.field(Task::getName), () -> faker.name().title())
                 .supply(Select.field(Task::getDescription), () -> faker.text().text())
                 .ignore(Select.field(Task::getTaskStatus))
-                .ignore(Select.field(Task::getLabels)) // не генерировать метки в задачах
+                .ignore(Select.field(Task::getLabels))
                 .toModel();
 
         labelModel = Instancio.of(Label.class)
                 .ignore(Select.field(Label::getId))
                 .ignore(Select.field(Label::getCreatedAt))
-                .ignore(Select.field(Label::getTasks)) // не генерировать обратные связи
+                .ignore(Select.field(Label::getTasks))
                 .toModel();
     }
 }
