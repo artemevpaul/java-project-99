@@ -5,7 +5,6 @@ node_modules
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
-src/main/resources/application-secrets.yml 
 ### IntelliJ IDEA ###
 .idea
 .idea/modules.xml
@@ -43,4 +42,4 @@ bin/
 
 ### Mac OS ###
 .DS_Store
-/src/main/resources/certs/
+#/src/main/resources/certs/
