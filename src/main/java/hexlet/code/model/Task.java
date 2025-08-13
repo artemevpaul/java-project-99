@@ -50,7 +50,7 @@ public class Task implements BaseEntity {
     @ManyToOne
     private TaskStatus taskStatus;
 
-    @ManyToOne(optional = false, cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JsonProperty("assignee_id")
     private User assignee;
 
