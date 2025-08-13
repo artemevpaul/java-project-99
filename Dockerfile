@@ -10,7 +10,7 @@ ENV JWT_PRIVATE_KEY_PATH="file:/app/certs/private.pem" \
 
 SHELL ["/bin/sh", "-lc"]
 
-CMD 'mkdir -p /app/certs; \
-     if [ -n "${JWT_PRIVATE_KEY:-}" ]; then printf "%b" "$JWT_PRIVATE_KEY" | sed "s/\r$//" > /app/certs/private.pem; fi; \
-     if [ -n "${JWT_PUBLIC_KEY:-}" ];  then printf "%b" "$JWT_PUBLIC_KEY"  | sed "s/\r$//" > /app/certs/public.pem;  fi; \
-     exec ./build/install/app/bin/app'
+CMD mkdir -p /app/certs; \
+    if [ -n "${JWT_PRIVATE_KEY:-}" ]; then printf "%b" "$JWT_PRIVATE_KEY" | sed "s/\r$//" > /app/certs/private.pem; fi; \
+    if [ -n "${JWT_PUBLIC_KEY:-}" ];  then printf "%b" "$JWT_PUBLIC_KEY"  | sed "s/\r$//" > /app/certs/public.pem;  fi; \
+    exec ./build/install/app/bin/app
