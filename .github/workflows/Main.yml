@@ -31,6 +31,3 @@ jobs:
           cache-read-only: false
 #      - run: ./gradlew checkstyleMain
       - run: ./gradlew test
-        env:
-          JWT_PRIVATE_KEY_PATH: ${{ secrets.JWT_PRIVATE_KEY_PATH }}
-          JWT_PUBLIC_KEY_PATH: ${{ secrets.JWT_PUBLIC_KEY_PATH }}
