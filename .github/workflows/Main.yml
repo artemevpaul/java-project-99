@@ -21,9 +21,9 @@ jobs:
         run: chmod +x gradlew
       - name: Write JWT keys
         run: |
-          mkdir -p certs
-          printf "%s" "${{ secrets.JWT_PRIVATE_KEY }}" > certs/private.pem
-          printf "%s" "${{ secrets.JWT_PUBLIC_KEY }}"  > certs/public.pem
+          mkdir -p src/main/resources/certs
+          printf "%s" "${{ secrets.JWT_PRIVATE_KEY }}" > src/main/resources/certs/private.pem
+          printf "%s" "${{ secrets.JWT_PUBLIC_KEY }}"  > src/main/resources/certs/public.pem
       - name: Build with Gradle
         uses: gradle/gradle-build-action@v3
         with:
