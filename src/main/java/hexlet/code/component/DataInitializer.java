@@ -2,13 +2,9 @@ package hexlet.code.component;
 
 import hexlet.code.controllers.api.LabelController;
 import hexlet.code.controllers.api.TaskStatusController;
-import hexlet.code.dto.UserCreateDTO;
-import hexlet.code.controllers.api.UsersController;
 import hexlet.code.dto.label.LabelCreateDTO;
 import hexlet.code.dto.taskStatus.TaskStatusCreateDTO;
-import hexlet.code.mapper.UserMapper;
 import hexlet.code.model.User;
-import hexlet.code.repository.UserRepository;
 import hexlet.code.service.CustomUserDetailsService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

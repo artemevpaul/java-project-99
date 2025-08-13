@@ -29,5 +29,5 @@ jobs:
         with:
           gradle-version: wrapper
           cache-read-only: false
-#      - run: ./gradlew checkstyleMain
+      - run: ./gradlew checkstyleMain
       - run: ./gradlew test

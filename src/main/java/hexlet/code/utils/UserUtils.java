@@ -28,8 +28,9 @@ public class UserUtils {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         return postAuthorEmail.equals(authentication.getName());
     }
+
     public User getTestUser() {
-        return  userRepository.findByEmail("hexlet@example.com")
+        return userRepository.findByEmail("hexlet@example.com")
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 }

@@ -2,20 +2,16 @@ package hexlet.code.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import hexlet.code.controllers.api.TaskController;
 import hexlet.code.dto.task.TaskCreateDTO;
 import hexlet.code.dto.task.TaskDTO;
 import hexlet.code.dto.task.TaskUpdateDTO;
 import hexlet.code.mapper.TaskMapper;
-import hexlet.code.mapper.UserMapper;
 import hexlet.code.model.Task;
 import hexlet.code.model.User;
-import hexlet.code.repository.LabelRepository;
 import hexlet.code.repository.TaskRepository;
 import hexlet.code.repository.TaskStatusRepository;
 import hexlet.code.repository.UserRepository;
 import hexlet.code.util.ModelGenerator;
-import jakarta.transaction.Transactional;
 import org.assertj.core.api.Assertions;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,11 +21,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.JwtRequestPostProcessor;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.JwtRequestPostProcessor;
-
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -39,7 +34,10 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -63,9 +61,6 @@ class TaskControllerTest {
     @Autowired
     private TaskStatusRepository taskStatusRepository;
 
-//    @Autowired
-//    private LabelRepository labelRepository;
-
     @Autowired
     private TaskMapper taskMapper;
 
@@ -81,30 +76,30 @@ class TaskControllerTest {
     private JwtRequestPostProcessor token;
 
 
-@BeforeEach
-public void setUp() {
-    taskRepository.deleteAll();
-    userRepository.deleteAll();
-    taskStatusRepository.deleteAll();
+    @BeforeEach
+    public void setUp() {
+        taskRepository.deleteAll();
+        userRepository.deleteAll();
+        taskStatusRepository.deleteAll();
 
-    mockMvc = MockMvcBuilders.webAppContextSetup(wac)
-            .defaultResponseCharacterEncoding(StandardCharsets.UTF_8)
-            .apply(springSecurity())
-            .build();
+        mockMvc = MockMvcBuilders.webAppContextSetup(wac)
+                .defaultResponseCharacterEncoding(StandardCharsets.UTF_8)
+                .apply(springSecurity())
+                .build();
 
-    testUser = Instancio.of(modelGenerator.getUserModel()).create();
-    userRepository.save(testUser);
-    token = jwt().jwt(builder -> builder.subject(testUser.getEmail()));
+        testUser = Instancio.of(modelGenerator.getUserModel()).create();
+        userRepository.save(testUser);
+        token = jwt().jwt(builder -> builder.subject(testUser.getEmail()));
 
-    var status = Instancio.of(modelGenerator.getTaskStatusModel()).create();
-    taskStatusRepository.save(status);
+        var status = Instancio.of(modelGenerator.getTaskStatusModel()).create();
+        taskStatusRepository.save(status);
 
-    testTask = Instancio.of(modelGenerator.getTaskModel()).create();
-    testTask.setAssignee(testUser);
-    testTask.setTaskStatus(status);
+        testTask = Instancio.of(modelGenerator.getTaskModel()).create();
+        testTask.setAssignee(testUser);
+        testTask.setTaskStatus(status);
 
-    testTask.getLabels().clear();
-}
+        testTask.getLabels().clear();
+    }
 
     @Test
     public void testIndex() throws Exception {
@@ -115,12 +110,14 @@ public void setUp() {
                 .getResponse();
         var body = response.getContentAsString();
 
-        List<TaskDTO> taskDTOS = om.readValue(body, new TypeReference<>() {});
+        List<TaskDTO> taskDTOS = om.readValue(body, new TypeReference<>() {
+        });
 
         var actual = taskDTOS;
         var expected = taskRepository.findAll().stream().map(taskMapper::map).toList();
         Assertions.assertThat(actual).containsExactlyInAnyOrderElementsOf(expected);
     }
+
     @Test
     public void testCreate() throws Exception {
         var createDto = new TaskCreateDTO();
@@ -143,6 +140,7 @@ public void setUp() {
         assertNotNull(task);
         assertThat(task.getName()).isEqualTo(testTask.getName());
     }
+
     @Test
     public void testUpdate() throws Exception {
         taskRepository.save(testTask);
@@ -161,6 +159,7 @@ public void setUp() {
         testTask = taskRepository.findById(testTask.getId()).orElseThrow();
         assertThat(testTask.getName()).isEqualTo(data.getTitle().get());
     }
+
     @Test
     public void testDestroy() throws Exception {
         taskRepository.save(testTask);
@@ -171,15 +170,16 @@ public void setUp() {
         assertThat(taskRepository.existsById(testTask.getId())).isEqualTo(false);
     }
 
-//    @Test
-//    public void testDestroyFailed() throws Exception {
-//        taskRepository.save(testTask);
-//        var request = delete("/api/tasks/" + testTask.getId()).with(jwt());
-//        mockMvc.perform(request)
-//                .andExpect(status().isForbidden());
-//
-//        assertThat(taskRepository.existsById(testTask.getId())).isEqualTo(true);
-//    }
+    @Test
+    public void testDestroyRequiresAuthentication() throws Exception {
+        taskRepository.save(testTask);
+
+        mockMvc.perform(delete("/api/tasks/" + testTask.getId()))
+                .andExpect(status().isUnauthorized());
+
+        assertThat(taskRepository.existsById(testTask.getId())).isTrue();
+    }
+
 
     @Test
     public void testFilteredIndex() throws Exception {

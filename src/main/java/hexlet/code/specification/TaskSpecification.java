@@ -17,19 +17,23 @@ public class TaskSpecification {
     }
 
     private Specification<Task> withTitleCont(String titleCont) {
-        return ((root, query, cb) -> titleCont == null ? cb.conjunction() : cb.like(cb.lower(root.get("title")), "%" + titleCont + "%"));
+        return ((root, query, cb) ->
+                titleCont == null ? cb.conjunction() : cb.like(cb.lower(root.get("title")), "%" + titleCont + "%"));
     }
 
-    private Specification<Task> withAssigneeId (Long assigneeId) {
-        return ((root, query, cb) -> assigneeId == null ? cb.conjunction() : cb.equal(root.get("assignee").get("id"), assigneeId));
+    private Specification<Task> withAssigneeId(Long assigneeId) {
+        return ((root, query, cb) ->
+                assigneeId == null ? cb.conjunction() : cb.equal(root.get("assignee").get("id"), assigneeId));
     }
 
     private Specification<Task> withStatus(String status) {
-        return ((root, query, cb) -> status == null ? cb.conjunction() : cb.like(cb.lower(root.get("status")), "%" + status + "%"));
+        return ((root, query, cb) ->
+                status == null ? cb.conjunction() : cb.like(cb.lower(root.get("status")), "%" + status + "%"));
     }
 
-    private Specification<Task> withLabelId (Long labelId) {
-        return (root, query, cb) -> labelId == null ? cb.conjunction() : cb.greaterThan(root.get("label"), labelId);
+    private Specification<Task> withLabelId(Long labelId) {
+        return (root, query, cb) ->
+                labelId == null ? cb.conjunction() : cb.greaterThan(root.get("label"), labelId);
     }
 
 }
