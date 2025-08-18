@@ -4,14 +4,16 @@ import hexlet.code.dto.TaskParamsDTO;
 import hexlet.code.dto.task.TaskCreateDTO;
 import hexlet.code.dto.task.TaskDTO;
 import hexlet.code.dto.task.TaskUpdateDTO;
-import hexlet.code.exception.ResourceNotFoundException;
 import hexlet.code.mapper.TaskMapper;
 import hexlet.code.repository.TaskRepository;
+import hexlet.code.service.TaskService;
 import hexlet.code.specification.TaskSpecification;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,16 +28,18 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/tasks")
+@AllArgsConstructor
 public class TaskController {
 
     @Autowired
     private TaskMapper taskMapper;
 
-    @Autowired
-    private TaskRepository taskRepository;
+    private final TaskRepository taskRepository;
 
-    @Autowired
-    private TaskSpecification specBuilder;
+    private final TaskSpecification specBuilder;
+
+    private final TaskService taskService;
+
 
     @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
@@ -52,38 +56,31 @@ public class TaskController {
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public TaskDTO create(@Valid @RequestBody TaskCreateDTO taskData) {
-        var task = taskMapper.map(taskData);
-        taskRepository.save(task);
-        var taskDto = taskMapper.map(task);
-        return taskDto;
+        return taskService.create(taskData);
     }
+
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public TaskDTO show(@Valid @PathVariable Long id) {
-        var task = taskRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Task with id " + id + " not found"));
-        var taskDto = taskMapper.map(task);
-        return taskDto;
+    public TaskDTO show(@PathVariable Long id) {
+        return taskService.findById(id);
     }
+
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("isAuthenticated()")
     public TaskDTO update(@Valid @RequestBody TaskUpdateDTO taskData, @PathVariable Long id) {
-        var task = taskRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Task with id " + id + " not found"));
-        taskMapper.update(taskData, task);
-        taskRepository.save(task);
-        var taskDto = taskMapper.map(task);
-        return taskDto;
+        return taskService.update(id, taskData);
     }
+
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("isAuthenticated()")
     public void delete(@PathVariable long id) {
-        var task = taskRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Task with id " + id + " not found"));
-        taskRepository.deleteById(id);
+        taskService.delete(id);
     }
+
 
 }

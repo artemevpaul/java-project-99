@@ -1,5 +1,6 @@
 package hexlet.code.dto.label;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,6 +8,7 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
+@EqualsAndHashCode(of = {"id", "name"})
 public class LabelDTO {
 
     private Long id;

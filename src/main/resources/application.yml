@@ -4,7 +4,7 @@ spring:
     hibernate:
       ddl-auto: create
   profiles:
-    active: dev
+    active: development
 
 output:
   ansi:

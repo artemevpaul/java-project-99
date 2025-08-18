@@ -1,10 +1,14 @@
 package hexlet.code.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hexlet.code.AppApplication;
+import hexlet.code.dto.label.LabelDTO;
+import hexlet.code.mapper.LabelMapper;
 import hexlet.code.model.Label;
 import hexlet.code.repository.LabelRepository;
 import hexlet.code.util.ModelGenerator;
+import org.assertj.core.api.Assertions;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,6 +22,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -46,6 +51,9 @@ public class LabelControllerTest {
 
     @Autowired
     private ModelGenerator modelGenerator;
+
+    @Autowired
+    private LabelMapper labelMapper;
 
     @Autowired
     private LabelRepository labelRepository;
@@ -88,12 +96,18 @@ public class LabelControllerTest {
     public void testIndex() throws Exception {
         labelRepository.save(testLabel);
 
-        var result = mockMvc.perform(get("/api/labels").with(jwt()))
+        var response = mockMvc.perform(get("/api/labels").with(jwt()))
                 .andExpect(status().isOk())
-                .andReturn();
-        var body = result.getResponse().getContentAsString();
+                .andReturn()
+                .getResponse();
+        var body = response.getContentAsString();
 
-        assertThatJson(body).isArray();
+        List<LabelDTO> labelDTOs = om.readValue(body, new TypeReference<>() { });
+        var actual = labelDTOs;
+        var expected = labelRepository.findAll().stream().map(labelMapper::map).toList();
+
+
+        Assertions.assertThat(actual).containsExactlyInAnyOrderElementsOf(expected);
     }
 
     @Test
