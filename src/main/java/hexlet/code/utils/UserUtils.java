@@ -25,12 +25,6 @@ public class UserUtils {
         return userRepository.findByEmail(email).get();
     }
 
-//    public boolean isAssignee(long taskId) {
-//        var taskAssigneeEmail = taskRepository.findById(taskId).get().getAssignee().getEmail();
-//        var authentication = SecurityContextHolder.getContext().getAuthentication();
-//        return taskAssigneeEmail.equals(authentication.getName());
-//    }
-
     public boolean isActualUser(Long userId) {
         try {
             var auth = SecurityContextHolder.getContext().getAuthentication();
