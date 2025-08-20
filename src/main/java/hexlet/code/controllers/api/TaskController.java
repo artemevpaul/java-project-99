@@ -4,13 +4,9 @@ import hexlet.code.dto.TaskParamsDTO;
 import hexlet.code.dto.task.TaskCreateDTO;
 import hexlet.code.dto.task.TaskDTO;
 import hexlet.code.dto.task.TaskUpdateDTO;
-import hexlet.code.mapper.TaskMapper;
-import hexlet.code.repository.TaskRepository;
 import hexlet.code.service.TaskService;
-import hexlet.code.specification.TaskSpecification;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,25 +27,14 @@ import java.util.List;
 @AllArgsConstructor
 public class TaskController {
 
-    @Autowired
-    private TaskMapper taskMapper;
-
-    private final TaskRepository taskRepository;
-
-    private final TaskSpecification specBuilder;
-
     private final TaskService taskService;
-
 
     @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<TaskDTO>> index(TaskParamsDTO params) {
-        var spec = specBuilder.build(params);
-        var tasks = taskRepository.findAll(spec);
-        var result = tasks.stream().map(taskMapper::map).toList();
-
+        var result = taskService.getAll(params);
         return ResponseEntity.ok()
-                .header("X-Total-Count", String.valueOf(tasks.size()))
+                .header("X-Total-Count", String.valueOf(result.size()))
                 .body(result);
     }
 
@@ -59,13 +44,11 @@ public class TaskController {
         return taskService.create(taskData);
     }
 
-
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public TaskDTO show(@PathVariable Long id) {
         return taskService.findById(id);
     }
-
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -74,13 +57,10 @@ public class TaskController {
         return taskService.update(id, taskData);
     }
 
-
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("isAuthenticated()")
     public void delete(@PathVariable long id) {
         taskService.delete(id);
     }
-
-
 }

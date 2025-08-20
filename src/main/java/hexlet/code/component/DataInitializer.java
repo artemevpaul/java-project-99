@@ -5,7 +5,7 @@ import hexlet.code.controllers.api.TaskStatusController;
 import hexlet.code.dto.label.LabelCreateDTO;
 import hexlet.code.dto.taskStatus.TaskStatusCreateDTO;
 import hexlet.code.model.User;
-import hexlet.code.service.CustomUserDetailsService;
+import hexlet.code.service.imlementations.UserServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -29,7 +29,7 @@ public class DataInitializer implements ApplicationRunner {
 //    private UsersController usersController;
 
     @Autowired
-    private CustomUserDetailsService userService;
+    private UserServiceImpl userService;
 
     @Autowired
     private TaskStatusController taskStatusController;
@@ -44,7 +44,7 @@ public class DataInitializer implements ApplicationRunner {
         var userData = new User();
         userData.setEmail(email);
         userData.setPasswordDigest("qwerty");
-        userService.createUser(userData);
+        userService.create(userData);
 
         List<TaskStatusCreateDTO> taskStatuses = Arrays.asList(
                 new TaskStatusCreateDTO("Draft", "draft"),

@@ -31,7 +31,7 @@ public class UserUtils {
 //        return taskAssigneeEmail.equals(authentication.getName());
 //    }
 
-    public boolean isAuthenticated(Long userId) {
+    public boolean isActualUser(Long userId) {
         try {
             var auth = SecurityContextHolder.getContext().getAuthentication();
             if (auth == null || !auth.isAuthenticated() || auth.getName() == null) {
