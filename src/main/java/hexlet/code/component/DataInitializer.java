@@ -7,7 +7,6 @@ import hexlet.code.dto.taskStatus.TaskStatusCreateDTO;
 import hexlet.code.model.User;
 import hexlet.code.service.imlementations.UserServiceImpl;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
@@ -19,23 +18,11 @@ import java.util.List;
 @AllArgsConstructor
 public class DataInitializer implements ApplicationRunner {
 
-//    @Autowired
-//    private final UserRepository userRepository;
-//
-//    @Autowired
-//    private final UserMapper userMapper;
-//
-//    @Autowired
-//    private UsersController usersController;
+    private final UserServiceImpl userService;
 
-    @Autowired
-    private UserServiceImpl userService;
+    private final TaskStatusController taskStatusController;
 
-    @Autowired
-    private TaskStatusController taskStatusController;
-
-    @Autowired
-    private LabelController labelController;
+    private final LabelController labelController;
 
 
     @Override
