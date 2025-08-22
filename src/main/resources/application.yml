@@ -3,8 +3,6 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: create
-  profiles:
-    active: development
 
 output:
   ansi:
