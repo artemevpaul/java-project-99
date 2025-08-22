@@ -50,10 +50,9 @@ public class UsersController {
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("@userUtils.isActualUser(#id)")
-    public UserDTO update(@RequestBody UserUpdateDTO userData, @PathVariable Long id) {
+    public UserDTO update(@Valid @RequestBody UserUpdateDTO userData, @PathVariable Long id) {
         return userService.update(id, userData);
     }
-
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
